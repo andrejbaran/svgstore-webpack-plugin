@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "lib": ["es2017"],
+        "declaration": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "removeComments": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "alwaysStrict": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true
+    }
+}

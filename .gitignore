@@ -1,0 +1,15 @@
+# loader
+dist
+
+# node
+node_modules
+
+# jest/yarn
+coverage
+yarn-*
+
+# emacs
+*~
+.*~
+*#
+.*#
