@@ -1,6 +1,6 @@
 {
   "name": "svgstore-webpack-plugin",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "description": "Webpack plugin that stores svg images as symbols and emits or injects them into html",
   "keywords": [
     "webpack",
