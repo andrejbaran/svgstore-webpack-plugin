@@ -36,9 +36,11 @@ export class SvgstoreWebpackPlugin {
             this.options.context = compiler.options.context;
         }
 
-        compiler.plugin("compilation", (compilation) => {
-            compilation.plugin(
-                "html-webpack-plugin-before-html-generation",
+        compiler.hooks.compilation.tap("SvgstoreWebpackPlugin", (compilation: any) => {
+            compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration
+            &&
+            compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
+                "SvgstoreWebpackPlugin",
                 (htmlData: any, done: Function) => {
                     htmlData.assets["svgstore"] = this.svgs.toString({
                         inline: true
@@ -49,7 +51,7 @@ export class SvgstoreWebpackPlugin {
             );
         });
 
-        compiler.plugin("make", async (compilation, done) => {
+        compiler.hooks.beforeCompile.tapPromise("make", async (compilation: any) => {
             let files: string[] = [];
 
             try {
@@ -63,8 +65,6 @@ export class SvgstoreWebpackPlugin {
                 }
             } catch (e) {
                 compilation.errors.push(e);
-            } finally {
-                done();
             }
         });
     }
