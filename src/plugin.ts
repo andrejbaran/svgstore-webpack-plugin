@@ -39,33 +39,31 @@ export class SvgstoreWebpackPlugin {
         compiler.hooks.compilation.tap("SvgstoreWebpackPlugin", (compilation: any) => {
             compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration
             &&
-            compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapAsync(
+            compilation.hooks.htmlWebpackPluginBeforeHtmlGeneration.tapPromise(
                 "SvgstoreWebpackPlugin",
-                (htmlData: any, done: Function) => {
+                async (htmlData: any) => {
+                    let files: string[] = [];
+
+                    try {
+                        files = await glob(this.options.src, {
+                            cwd: this.options.context
+                        });
+
+                        for (const file of files) {
+                            const fileInfo = parse(file);
+                            this.svgs.add(fileInfo.name, readFileSync(file));
+                        }
+                    } catch (e) {
+                        compilation.errors.push(e);
+                    }
+
                     htmlData.assets["svgstore"] = this.svgs.toString({
                         inline: true
                     });
 
-                    done(null, htmlData);
+                    return htmlData;
                 }
             );
-        });
-
-        compiler.hooks.beforeCompile.tapPromise("make", async (compilation: any) => {
-            let files: string[] = [];
-
-            try {
-                files = await glob(this.options.src, {
-                    cwd: this.options.context
-                });
-
-                for (const file of files) {
-                    const fileInfo = parse(file);
-                    this.svgs.add(fileInfo.name, readFileSync(file));
-                }
-            } catch (e) {
-                compilation.errors.push(e);
-            }
         });
     }
 
